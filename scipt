@@ -1,0 +1,63 @@
+let weather = {
+    apiKey: "0883a83c97609902898b8f1b586c186e",
+    
+    fetchWeather: function (city) {
+      fetch(
+        "https://api.openweathermap.org/data/2.5/weather?q=" +
+          city +
+          "&units=metric&appid=" +
+          this.apiKey 
+          
+      )
+
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) =>this.displayWeather(data));
+    },
+    displayWeather: function (data) {
+      const { name } = data;
+      
+     
+      
+
+      document.querySelector(".city").innerText = "Weather in " + name;
+      ///backgroundda
+      document.querySelector(".icon").src =
+        "https://openweathermap.org/img/wn/" + data.weather[0].icon + ".png";
+
+      document.querySelector(".description").innerText = data.weather[0].description;
+
+       /*       current temp */
+      document.querySelector(".temp").innerText =  data.main.temp + "°C";
+
+       /* max temp  */
+      document.querySelector(".max").innerText =
+        "Max-Temp: " + data.main.temp_max + "°C";
+        
+        /* min temp */
+      document.querySelector(".min").innerText =
+        "Min-Temp: " + data.main.temp_min + "°C";
+        
+    },
+
+    ////////
+    search: function () {
+      this.fetchWeather(document.querySelector(".search-bar").value);
+    },
+  };
+
+
+ ///////search button
+  document.querySelector(".search button").addEventListener("click", function () {
+    weather.search();
+  });
+  ///////search bar
+  document.querySelector(".search-bar")
+    .addEventListener("keyup", function (event) {
+      if (event.key == "Enter") {
+        weather.search();
+      }
+    }); 
+  /////default weather
+  weather.fetchWeather("denver");
